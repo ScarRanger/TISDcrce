@@ -138,25 +138,46 @@ app.post('/predict', async (req, res) => {
         // 2. Construct Prompt for Gemini
         // IMPORTANT: Frame this as risk assessment/contextual analysis, NOT prediction.
         const prompt = `
-        **Disclaimer:** Earthquake prediction (specific time, location, magnitude) is scientifically impossible with current technology. This analysis provides a general seismic risk assessment based on historical data and known geological factors.
 
         **Analysis Request:**
-        Assess the general seismic activity level and potential risk for the location:
+        Assess the general natural disaster activity level and potential risk for the location:
         Latitude: ${lat}
         Longitude: ${lon}
 
-        **Historical Context from provided dataset (within ${MAX_DISTANCE_KM}km, limited to ${MAX_HISTORICAL_EVENTS} events, sorted by distance):**
+        **Historical Context from provided dataset (within ${MAX_DISTANCE_KM}km, limited to ${MAX_HISTORICAL_EVENTS} events, sorted by distance for each disaster type):**
         ${historicalContext}
 
         **Task:**
-        Based on the provided historical context AND your general knowledge of regional tectonics, fault lines, and seismicity patterns for this specific latitude and longitude:
+        Based on the provided historical context AND your general knowledge of regional geography, geology, climate, and historical disaster patterns for this specific latitude and longitude:
+
+        For **Earthquakes**:
         1. Describe the general tectonic setting of this area.
         2. Assess the *general* level of seismic activity typically expected for this location (e.g., low, moderate, high, very high).
         3. If earthquakes *were* to occur, what is a typical magnitude range based on historical patterns and known fault characteristics?
         4. Mention any major known fault lines nearby, if applicable.
         5. Briefly summarize the potential seismic risk level for this specific location, keeping in mind the inherent unpredictability.
 
-        **Output Format:** Provide a concise summary addressing points 1-5. Start the response with the disclaimer above.
+        For **Wildfires**:
+        6. Describe the typical vegetation, climate patterns, and any known history of significant wildfires in this region.
+        7. Assess the *general* level of wildfire risk for this location (e.g., low, moderate, high). Consider factors like dry seasons, vegetation density, and human activity.
+        8. If wildfires *were* to occur, what are typical contributing factors and potential scale based on historical events and regional characteristics?
+        9. Mention any nearby geographical features or human developments that might increase or decrease wildfire risk.
+        10. Briefly summarize the potential wildfire risk level for this specific location.
+
+        For **Tsunamis**:
+        11. Describe the proximity of this location to major bodies of water and known sources of tsunamigenic activity (e.g., subduction zones, major offshore faults, historical landslide areas).
+        12. Assess the *general* level of tsunami risk for this location (e.g., very low, low, moderate, high).
+        13. If a tsunami *were* to impact this area, what might be a typical inundation level or historical precedent?
+        14. Mention any geographical features (e.g., shallow continental shelf, bays) that might amplify or mitigate tsunami impact.
+        15. Briefly summarize the potential tsunami risk level for this specific location.
+
+        For **Other Natural Disasters** (e.g., floods, cyclones/hurricanes, landslides, volcanic activity, extreme weather events):
+        16. Identify other significant types of natural disasters that have historically affected or are geographically relevant to this region.
+        17. For each identified disaster type, briefly assess the *general* level of risk (e.g., low, moderate, high).
+        18. Mention any specific geographical or meteorological factors that contribute to these risks.
+        19. Briefly summarize the potential risk level for these other natural disasters for this specific location.
+
+        **Output Format:** Provide a concise summary addressing points 1-19. Start the response with the disclaimer: "Please note that this analysis is a general assessment based on available information and models. Natural disaster risks are inherently complex and can change over time. This analysis should not be used for critical decision-making without consulting local experts and official resources." Provide each disaster type's analysis in a separate, clearly labeled section.
         `;
 
         console.log("\n--- Sending Prompt to Gemini ---");
@@ -168,8 +189,6 @@ app.post('/predict', async (req, res) => {
         const response = await result.response;
         const geminiText = response.text();
 
-        console.log("\n--- Received Response from Gemini ---");
-        console.log(geminiText);
         console.log("-----------------------------------\n");
 
         // 4. Send Response to Client

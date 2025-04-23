@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earthquake Context Analyzer</title>
     <link rel="stylesheet" href="style.css"> <!-- Optional CSS -->
 </head>
+
 <body>
-    <h1>Earthquake Historical Context Analyzer</h1>
-    <p><strong>Disclaimer:</strong> This tool analyzes historical data and uses AI for context. It <strong>cannot</strong> predict future earthquakes.</p>
+    <h1>Disaster Context Analyzer</h1>
 
     <form id="prediction-form">
         <label for="dateTime">Date and Time:</label>
         <input type="datetime-local" id="dateTime" name="dateTime" required>
 
         <label for="latitude">Latitude:</label>
-        <input type="number" id="latitude" name="latitude" step="any" min="-90" max="90" required placeholder="e.g., 34.05">
+        <input type="number" id="latitude" name="latitude" step="any" min="-90" max="90" required
+            placeholder="e.g., 34.05">
 
         <label for="longitude">Longitude:</label>
-        <input type="number" id="longitude" name="longitude" step="any" min="-180" max="180" required placeholder="e.g., -118.24">
+        <input type="number" id="longitude" name="longitude" step="any" min="-180" max="180" required
+            placeholder="e.g., -118.24">
 
         <button type="submit">Analyze Context</button>
     </form>
@@ -31,9 +34,10 @@
         <div id="loading" style="display: none;">
             <p>Analyzing, please wait...</p>
         </div>
-         <div id="error-message" style="color: red; display: none;"></div>
+        <div id="error-message" style="color: red; display: none;"></div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
